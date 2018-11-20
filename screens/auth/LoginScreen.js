@@ -57,10 +57,10 @@ export default class LoginScreen extends React.Component {
             <View style={{display: 'flex', flexGrow: 1}}></View>
             <View style={{ display: 'flex', flexDirection: 'row', width: '100%'}}>
               <View style={{padding: 20, textAlign: 'center', borderBottomColor: '#fff', borderBottomWidth: 2}}>
-                <Text style={{color: '#fff', fontWeight: 'bold'}}>Sign Up</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold'}}>Sign In</Text>
               </View>
-              <View style={{padding: 20, textAlign: 'center'}}>
-                <Text style={{color: '#fff'}}>Sign In</Text>
+              <View style={{ textAlign: 'center'}}>
+                <Text style={{ padding: 20, color: '#fff' }} onPress={this.onCreateAccountPress}>New Account</Text>
               </View>
             </View>
           </LinearGradient>
@@ -78,8 +78,6 @@ export default class LoginScreen extends React.Component {
             autoCorrect={false}
           />
 
-          <View style={{ paddingTop: 10 }} />
-
           <TextInput
             style={styles.input}
             value={this.state.password}
@@ -93,15 +91,12 @@ export default class LoginScreen extends React.Component {
           />
 
           <View style={styles.button}>
-            <Text style={{color: '#0AC9D9', textAlign: 'center'}}>Sign In</Text>
+            <Text style={{color: '#0AC9D9', textAlign: 'center', padding: 15}} onPress={this.onLoginPress}>Sign In</Text>
           </View>
 
-          <Button style={styles.input} title="Login" onPress={this.onLoginPress} />
-          <Button title="Create account..." onPress={this.onCreateAccountPress} />
-          <Button
-            title="Forgot Password..."
-            onPress={this.onForgotPasswordPress}
-          />
+          <View style={{marginTop: 30}}>
+            <Text style={{color: '#0AC9D9', textAlign: 'center', padding: 10}} onPress={this.onForgotPasswordPress}>Forgot Password?</Text>
+          </View>
         </View>
       </View>
     );
@@ -130,7 +125,6 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 30,
     borderColor: Colors.inputBorder,
-    padding: 15,
     marginBottom: 20,
     shadowOffset: { width: 0, height: 0 },
     shadowColor: "#000",
