@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 import MainTabNavigator from './navigation/MainTabNavigator';
 import ApiKeys from './constants/ApiKeys';
+import {requestCameraRoll} from "./helpers/permissions";
+
 import * as firebase from 'firebase';
 
 export default class App extends React.Component {
@@ -15,7 +17,7 @@ export default class App extends React.Component {
       isAuthenticationReady: false,
       isAuthenticated: false,
     };
-
+    requestCameraRoll();
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
