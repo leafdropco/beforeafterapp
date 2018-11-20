@@ -46,25 +46,26 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={{ height: `100%`, display: 'flex', flexDirection: 'column', backgroundColor: 'white' }}>
-        <View style={{ height: `40%` }}>
+        <View style={{ height: `30%` }}>
           <LinearGradient
-            colors={['#4B8E97', '#A3ECF5']}
+            colors={['#05809D', '#0AC9D9']}
             style={{ width: `100%`, height: `100%`, alignItems: 'center' }}
             start={{ x: 0, y: 1 }}
             end={{ x: 1, y: 1 }}
           >
-            <Text style={{ color: 'white', paddingTop: `10%`, fontSize: 20 }}><Text>before /</Text><Text style={{ fontWeight: 'bold' }}>/ After</Text></Text>
-            <View style={{ display: 'flex', justifyContent: 'space-between', }}>
-              <View>
-                <Text style={{}}>Sign up</Text>
+            <Text style={{ color: 'white', paddingTop: `25%`, fontSize: 24, marginBottom: 24 }}><Text>before /</Text><Text style={{ fontWeight: 'bold' }}>/ After</Text></Text>
+            <View style={{display: 'flex', flexGrow: 1}}></View>
+            <View style={{ display: 'flex', flexDirection: 'row', width: '100%'}}>
+              <View style={{padding: 20, textAlign: 'center', borderBottomColor: '#fff', borderBottomWidth: 2}}>
+                <Text style={{color: '#fff', fontWeight: 'bold'}}>Sign Up</Text>
               </View>
-              <View>
-                <Text>Sign In</Text>
+              <View style={{padding: 20, textAlign: 'center'}}>
+                <Text style={{color: '#fff'}}>Sign In</Text>
               </View>
             </View>
           </LinearGradient>
         </View>
-        <View style={{ padding: 20, }}>
+        <View style={{ padding: 20, paddingTop: 40, flex:1, alignItems:'center' }}>
           <TextInput
             style={styles.input}
             value={this.state.email}
@@ -91,7 +92,11 @@ export default class LoginScreen extends React.Component {
             autoCorrect={false}
           />
 
-          <Button style={styles.button} title="Login" onPress={this.onLoginPress} />
+          <View style={styles.button}>
+            <Text style={{color: '#0AC9D9', textAlign: 'center'}}>Sign In</Text>
+          </View>
+
+          <Button style={styles.input} title="Login" onPress={this.onLoginPress} />
           <Button title="Create account..." onPress={this.onCreateAccountPress} />
           <Button
             title="Forgot Password..."
@@ -107,16 +112,29 @@ const styles = StyleSheet.create({
   input: {
     color: Colors.inputBorder,
     width: `100%`,
-    height: 40,
-    borderWidth: 2,
-    borderRadius: 20,
+    backgroundColor: `#fff`,
+    borderWidth: 3,
+    borderRadius: 30,
     borderColor: Colors.inputBorder,
-    padding: 20
+    padding: 15,
+    marginBottom: 20,
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   button: {
-    borderWidth: 2,
-    borderRadius: 20,
+    width: 110,
+    color: Colors.inputBorder,
+    backgroundColor: `#fff`,
+    borderWidth: 3,
+    borderRadius: 30,
     borderColor: Colors.inputBorder,
-    padding: 20
+    padding: 15,
+    marginBottom: 20,
+    shadowOffset: { width: 0, height: 0 },
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   }
 });
