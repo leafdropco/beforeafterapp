@@ -28,13 +28,7 @@ export default class ForgotPasswordScreen extends React.Component {
       );
   };
 
-  onBackToLoginPress = () => {
-    var navActions = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Login' })],
-    });
-    this.props.navigation.dispatch(navActions);
-  };
+
 
   render() {
     return (
@@ -77,7 +71,7 @@ export default class ForgotPasswordScreen extends React.Component {
                 </View>
 
                 <View style={{marginTop: 30}}>
-                    <Text style={{color: '#0AC9D9', textAlign: 'center', padding: 10}} onPress={this.onBackToLoginPress}>Go Back</Text>
+                    <Text style={{color: '#0AC9D9', textAlign: 'center', padding: 10}} onPress={()=> this.props.navigation.navigate("Login")}>Go Back</Text>
                 </View>
             </View>
         </View>

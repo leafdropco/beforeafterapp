@@ -1,17 +1,17 @@
-import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
-import { NavigationActions } from 'react-navigation';
-import * as firebase from 'firebase';
-import { LinearGradient } from 'expo';
+import React from "react";
+import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
+import { NavigationActions } from "react-navigation";
+import * as firebase from "firebase";
+import { LinearGradient } from "expo";
 
-import Colors from '../../constants/Colors';
+import Colors from "../../constants/Colors";
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: "",
+      password: ""
     };
   }
 
@@ -20,52 +20,72 @@ export default class LoginScreen extends React.Component {
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(
-        () => { },
+        () => {
+          Alert.alert("signed in")
+        },
         error => {
           Alert.alert(error.message);
         }
       );
   };
-
-  onCreateAccountPress = () => {
-    var navActions = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Signup' })],
-    });
-    this.props.navigation.dispatch(navActions);
-  };
-
-  onForgotPasswordPress = () => {
-    var navActions = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'ForgotPassword' })],
-    });
-    this.props.navigation.dispatch(navActions);
-  };
-
   render() {
     return (
-      <View style={{ height: `100%`, display: 'flex', flexDirection: 'column', backgroundColor: 'white' }}>
+      <View
+        style={{
+          height: `100%`,
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "white"
+        }}
+      >
         <View style={{ height: `30%` }}>
           <LinearGradient
-            colors={['#05809D', '#0AC9D9']}
-            style={{ width: `100%`, height: `100%`, alignItems: 'center' }}
+            colors={["#05809D", "#0AC9D9"]}
+            style={{ width: `100%`, height: `100%`, alignItems: "center" }}
             start={{ x: 0, y: 1 }}
             end={{ x: 1, y: 1 }}
           >
-            <Text style={{ color: 'white', paddingTop: `25%`, fontSize: 24, marginBottom: 24 }}><Text>before /</Text><Text style={{ fontWeight: 'bold' }}>/ After</Text></Text>
-            <View style={{display: 'flex', flexGrow: 1}}></View>
-            <View style={{ display: 'flex', flexDirection: 'row', width: '100%'}}>
-              <View style={{padding: 20, textAlign: 'center', borderBottomColor: '#fff', borderBottomWidth: 2}}>
-                <Text style={{color: '#fff', fontWeight: 'bold'}}>Sign In</Text>
+            <Text
+              style={{
+                color: "white",
+                paddingTop: `25%`,
+                fontSize: 24,
+                marginBottom: 24
+              }}
+            >
+              <Text>before /</Text>
+              <Text style={{ fontWeight: "bold" }}>/ After</Text>
+            </Text>
+            <View style={{ display: "flex", flexGrow: 1 }} />
+            <View
+              style={{ display: "flex", flexDirection: "row", width: "100%" }}
+            >
+              <View
+                style={{
+                  padding: 20,
+                  textAlign: "center",
+                  borderBottomColor: "#fff",
+                  borderBottomWidth: 2
+                }}
+              >
+                <Text style={{ color: "#fff", fontWeight: "bold" }}>
+                  Sign In
+                </Text>
               </View>
-              <View style={{ textAlign: 'center'}}>
-                <Text style={{ padding: 20, color: '#fff' }} onPress={this.onCreateAccountPress}>New Account</Text>
+              <View style={{ textAlign: "center" }}>
+                <Text
+                  style={{ padding: 20, color: "#fff" }}
+                  onPress={() => this.props.navigation.navigate("Signup")}
+                >
+                  New Account
+                </Text>
               </View>
             </View>
           </LinearGradient>
         </View>
-        <View style={{ padding: 20, paddingTop: 40, flex:1, alignItems:'center' }}>
+        <View
+          style={{ padding: 20, paddingTop: 40, flex: 1, alignItems: "center" }}
+        >
           <TextInput
             style={styles.input}
             value={this.state.email}
@@ -91,11 +111,21 @@ export default class LoginScreen extends React.Component {
           />
 
           <View style={styles.button}>
-            <Text style={{color: '#0AC9D9', textAlign: 'center', padding: 15}} onPress={this.onLoginPress}>Sign In</Text>
+            <Text
+              style={{ color: "#0AC9D9", textAlign: "center", padding: 15 }}
+              onPress={this.onLoginPress}
+            >
+              Sign In
+            </Text>
           </View>
 
-          <View style={{marginTop: 30}}>
-            <Text style={{color: '#0AC9D9', textAlign: 'center', padding: 10}} onPress={this.onForgotPasswordPress}>Forgot Password?</Text>
+          <View style={{ marginTop: 30 }}>
+            <Text
+              style={{ color: "#0AC9D9", textAlign: "center", padding: 10 }}
+              onPress={() => this.props.navigation.navigate("ForgotPassword")}
+            >
+              Forgot Password?
+            </Text>
           </View>
         </View>
       </View>
@@ -116,7 +146,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowColor: "#000",
     shadowOpacity: 0.3,
-    shadowRadius: 3,
+    shadowRadius: 3
   },
   button: {
     width: 110,
@@ -129,6 +159,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowColor: "#000",
     shadowOpacity: 0.3,
-    shadowRadius: 3,
+    shadowRadius: 3
   }
 });

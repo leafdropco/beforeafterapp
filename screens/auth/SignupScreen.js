@@ -44,14 +44,6 @@ export default class SignupScreen extends React.Component {
       );
   };
 
-  onBackToLoginPress = () => {
-    var navActions = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Login' })],
-    });
-    this.props.navigation.dispatch(navActions);
-  };
-
   render() {
 
     return (
@@ -67,7 +59,7 @@ export default class SignupScreen extends React.Component {
           <View style={{display: 'flex', flexGrow: 1}}></View>
           <View style={{ display: 'flex', flexDirection: 'row', width: '100%'}}>
             <View style={{textAlign: 'center'}}>
-              <Text style={{padding: 20, color: '#fff'}} onPress={this.onBackToLoginPress}>Sign In</Text>
+              <Text style={{padding: 20, color: '#fff'}} onPress={()=> this.props.navigation.navigate("Login")}>Sign In</Text>
             </View>
             <View style={{padding: 20, textAlign: 'center', borderBottomColor: '#fff', borderBottomWidth: 2}}>
               <Text style={{color: '#fff', fontWeight: 'bold'}}>New Account</Text>

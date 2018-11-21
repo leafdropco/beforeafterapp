@@ -1,10 +1,20 @@
 import React from "react";
 import { Button, Image, View, ScrollView, StyleSheet } from "react-native";
 
-import { ImagePicker } from "expo";
+import { ImagePicker, LinearGradient } from "expo";
 import { TransitionImage } from "../components/AppComponents";
 import * as Expo from "expo";
 export default class PresentationScreen extends React.Component {
+  static navigationOptions = {
+    headerBackground: (
+      <LinearGradient
+        colors={["#05809D", "#0AC9D9"]}
+        style={{ width: `100%`, height: `100%`, alignItems: "center" }}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 1, y: 1 }}
+      />
+    )
+  };
   state = {
     before: null,
     after: null
