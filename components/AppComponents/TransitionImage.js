@@ -1,21 +1,12 @@
 import React from 'react';
-import {
-  Animated,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  Linking,
-  Alert,
-} from 'react-native';
+import { Animated, View, Dimensions } from 'react-native';
 
 export default class TransitionImage extends React.Component {
   state = {
     fadeAnim: new Animated.Value(0),
     shouldAnimate: false,
   };
+ 
   touchStart = () => {
     Animated.timing(this.state.fadeAnim, {
       toValue: 1,
