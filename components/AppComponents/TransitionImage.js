@@ -28,8 +28,8 @@ export default class TransitionImage extends React.Component {
         <Animated.Image
           source={{ uri: this.props.images.before }}
           style={{
-            width: 320,
-            height: 320,
+            width: this.props.width,
+            height: this.props.height,
             resizeMode: 'cover',
             position: 'absolute',
           }}
@@ -37,8 +37,8 @@ export default class TransitionImage extends React.Component {
         <Animated.Image
           source={{ uri: this.props.images.after }}
           style={{
-            width: 320,
-            height: 320,
+            width: this.props.width,
+            height: this.props.height,
             resizeMode: 'cover',
             opacity: this.state.fadeAnim,
           }}

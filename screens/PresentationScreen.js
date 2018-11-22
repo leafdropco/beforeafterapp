@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Image, View, ScrollView, StyleSheet } from "react-native";
 
 import { ImagePicker, LinearGradient } from "expo";
-import { TransitionImage } from "../components/AppComponents";
+import { TransitionImage, DefaultTextInput } from "../components/AppComponents";
 import * as Expo from "expo";
 export default class PresentationScreen extends React.Component {
   static navigationOptions = {
@@ -24,6 +24,16 @@ export default class PresentationScreen extends React.Component {
     return (
       <ScrollView style={styles.scrollView}>
         <View>
+          <DefaultTextInput placeholder="Presentation Name" />
+          <View style={{ flexDirection: "row", justifyContent:'space-between' }}>
+            <View style={{width:`45%`}}>
+              <DefaultTextInput placeholder="Before" />
+            </View>
+            <View></View>
+            <View style={{width:`45%`}}>
+              <DefaultTextInput placeholder="After" />
+            </View>
+          </View>
           {!before && (
             <Button title="Add Before Photo" onPress={this._pickBeforeImage} />
           )}

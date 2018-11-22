@@ -13,6 +13,10 @@ export default class LoginScreen extends React.Component {
       email: "",
       password: ""
     };
+    if (this.props.screenProps.isAuthenticated) {
+      this.props.navigation.navigate('App')
+    }
+
   }
 
   onLoginPress = () => {
@@ -21,7 +25,6 @@ export default class LoginScreen extends React.Component {
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(
         () => {
-          Alert.alert("signed in")
         },
         error => {
           Alert.alert(error.message);
@@ -56,9 +59,9 @@ export default class LoginScreen extends React.Component {
               <Text>before /</Text>
               <Text style={{ fontWeight: "bold" }}>/ After</Text>
             </Text>
-            <View style={{ display: "flex", flexGrow: 1 }} />
+            <View style={{ flexGrow: 1 }} />
             <View
-              style={{ display: "flex", flexDirection: "row", width: "100%" }}
+              style={{ marginLeft: 20, marginRight: 20, flexDirection: "row", width: "100%", justifyContent: 'space-between' }}
             >
               <View
                 style={{
