@@ -1,21 +1,12 @@
 import React from 'react';
-import {
-  Animated,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  Linking,
-  Alert,
-} from 'react-native';
+import { Animated, View, Dimensions } from 'react-native';
 
 export default class TransitionImage extends React.Component {
   state = {
     fadeAnim: new Animated.Value(0),
     shouldAnimate: false,
   };
+ 
   touchStart = () => {
     Animated.timing(this.state.fadeAnim, {
       toValue: 1,
@@ -37,8 +28,8 @@ export default class TransitionImage extends React.Component {
         <Animated.Image
           source={{ uri: this.props.images.before }}
           style={{
-            width: 320,
-            height: 320,
+            width: this.props.width,
+            height: this.props.height,
             resizeMode: 'cover',
             position: 'absolute',
           }}
@@ -46,8 +37,8 @@ export default class TransitionImage extends React.Component {
         <Animated.Image
           source={{ uri: this.props.images.after }}
           style={{
-            width: 320,
-            height: 320,
+            width: this.props.width,
+            height: this.props.height,
             resizeMode: 'cover',
             opacity: this.state.fadeAnim,
           }}

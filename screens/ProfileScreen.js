@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -7,22 +7,22 @@ import {
   TextInput,
   Button,
   Linking,
-  Alert,
-} from 'react-native';
-import { TestComponent, PhoneButton } from './../components/AppComponents';
-import * as firebase from 'firebase';
+  Alert
+} from "react-native";
+import { TestComponent, PhoneButton } from "./../components/AppComponents";
+import * as firebase from "firebase";
 
 export default class ProfileScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      currentPassword: '',
-      newPassword: '',
-      newEmail: '',
+      currentPassword: "",
+      newPassword: "",
+      newEmail: ""
     };
   }
 
@@ -49,7 +49,7 @@ export default class ProfileScreen extends React.Component {
         user
           .updatePassword(this.state.newPassword)
           .then(() => {
-            Alert.alert('Password was changed');
+            Alert.alert("Password was changed");
           })
           .catch(error => {
             console.log(error.message);
@@ -68,7 +68,7 @@ export default class ProfileScreen extends React.Component {
         user
           .updateEmail(this.state.newEmail)
           .then(() => {
-            Alert.alert('Email was changed');
+            Alert.alert("Email was changed");
           })
           .catch(error => {
             console.log(error.message);
@@ -81,13 +81,7 @@ export default class ProfileScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          paddingVertical: 50,
-          paddingHorizontal: 10,
-        }}>
+      <ScrollView style={styles.scrollView}>
         <Button title="Sign out" onPress={this.onSignoutPress} />
 
         <TextInput
@@ -132,19 +126,25 @@ export default class ProfileScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    flexDirection: "column",
+    paddingVertical: 50,
+    paddingHorizontal: 10
+  },
   text: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontSize: 20,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20
   },
   textInput: {
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: "gray",
     marginVertical: 20,
     padding: 10,
     height: 40,
-    alignSelf: 'stretch',
-    fontSize: 18,
-  },
+    alignSelf: "stretch",
+    fontSize: 18
+  }
 });
