@@ -22,6 +22,7 @@ export default class App extends React.Component {
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
+    requestCameraRoll()
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
     Promise.all([
       Font.loadAsync({
