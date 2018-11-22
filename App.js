@@ -1,10 +1,9 @@
 import React from "react";
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
-import { AppLoading, Asset, Font } from "expo";
+import { AsyncStorage } from "react-native"
+import { Font } from "expo";
 import {
   createSwitchNavigator,
-  createStackNavigator,
-  createAppContainer
+  createAppContainer,
 } from "react-navigation";
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from "./navigation/RootNavigation";
@@ -34,8 +33,11 @@ export default class App extends React.Component {
   onAuthStateChanged = user => {
     this.setState({ isAuthenticationReady: true });
     this.setState({ isAuthenticated: !!user });
+    if (user && user.uid != null) {
+      AsyncStorage.setItem('userId', user.uid);
+    }
   };
-  
+
   render() {
     const T = createAppContainer(
       createSwitchNavigator(
@@ -49,6 +51,6 @@ export default class App extends React.Component {
         }
       )
     );
-    return <T screenProps={{authed: this.state.isAuthenticated}}/>; 
+    return <T screenProps={{ authed: this.state.isAuthenticated }} />;
   }
 }

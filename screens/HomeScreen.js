@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, Text, View, StyleSheet, Dimensions, Platform } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Dimensions, Platform, AsyncStorage } from "react-native";
 
 import { LinearGradient } from "expo";
 
@@ -8,27 +8,12 @@ import { Button } from "react-native-paper";
 import { Ionicons } from '@expo/vector-icons';
 
 import * as firebase from "firebase";
-const beforeAfter = [
-  {
-    title: "Air in my Hair, I just don't care",
-    before:
-      "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae4520846654cd8e84b23/1509614691763/OliviaBossertPhotography+%28108+of+191%29.jpg?format=1500w",
-    after:
-      "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae46b24a694220a87bccc/1509614716315/OliviaBossertPhotography+%281+of+1%29.jpg?format=1500w",
-    duration: 3000,
-    createdOn: "10/11/18"
-  },
-  {
-    title: "Air in my Hair, I just don't care",
-    before:
-      "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae4520846654cd8e84b23/1509614691763/OliviaBossertPhotography+%28108+of+191%29.jpg?format=1500w",
-    after:
-      "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae46b24a694220a87bccc/1509614716315/OliviaBossertPhotography+%281+of+1%29.jpg?format=1500w",
-    duration: 3000,
-    createdOn: "10/11/18"
-  }
-];
+import "firebase/firestore";
+
 export default class HomeScreen extends React.Component {
+  state={
+    uid:null,
+  }
   static navigationOptions = ({ navigation }) => {
     return {
       headerBackground: (
@@ -42,18 +27,46 @@ export default class HomeScreen extends React.Component {
       headerRight: (
         <View style={styles.addButton}>
           <Text style={styles.plus} onPress={navigation.getParam("addPresentation")}>
-          <Ionicons
-            name={ Platform.OS === 'ios' ? `ios-add` : 'md-add'}
-            size={28}
-            color='#fff'
-          />
+            <Ionicons
+              name={Platform.OS === 'ios' ? `ios-add` : 'md-add'}
+              size={28}
+              color='#fff'
+            />
           </Text>
-          </View>
+        </View>
       )
     };
   };
+  _retrieveUserId = async () => {
+    try {
+      const value = await AsyncStorage.getItem('userId');
+      if (value !== null) {
+        this.setState({ uid: value })
+          let db = firebase.firestore();
+          db.settings({ timestampsInSnapshots: true })
+          console.log(value);
+          db.collection('data').doc(`${value}`).get().then((doc) => {
+            if (doc.exists) {
+              let data = doc.data();
+              this.setState({ data: data });
+              console.log("Document data:", data);
+            } else {
+              this.setState({ data: null });
+              console.log("No such document!");
+            }
+          }).catch(function (error) {
+            this.setState({ data: null });
+            console.log("Error getting document:", error);
+          });
+      }
+    } catch (error) {
+      console.log("There was an error")
+      // Error retrieving data
+    }
+  }
   componentDidMount() {
     this.props.navigation.setParams({ addPresentation: this.addPresentation });
+    this._retrieveUserId()
   }
   render() {
     return (
@@ -66,24 +79,32 @@ export default class HomeScreen extends React.Component {
         }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          {beforeAfter.map((image, index) => {
-            const Header = (
-              <View style={styles.container}>
-                <Text style={styles.text}>{image.title}</Text>
-              </View>
-            );
-            return (
-              <Card
-                key={`Card_${index}`}
-                header={Header}
-                body={<TransitionImage
-                  width={(Dimensions.get('window').width / 2) - 20}
-                  height={Dimensions.get('window').height / 2.5}
-                  images={{ before: image.before, after: image.after }} duration={image.duration} />}
-                callback={() => null}
-              />
-            );
-          })}
+          {this.state && this.state.data &&
+            this.state.data.presentations &&
+            this.state.data.presentations.map((image, index) => {
+              const Header = (
+                <View style={styles.container}>
+                  <Text style={styles.text}>{image.title}</Text>
+                </View>
+              );
+              return (
+                <Card
+                  key={`Card_${index}`}
+                  header={Header}
+                  body={<TransitionImage
+                    width={(Dimensions.get('window').width / 2) - 20}
+                    height={Dimensions.get('window').height / 2.5}
+                    images={{ before: image.before, after: image.after }} duration={image.duration} />}
+                  callback={() => null}
+                />
+              );
+            })}
+          {this.state && this.state.data == null && (
+            <View>
+              <Text>Looks like you don't have any presentations...</Text>
+              <Text>Click the plus button to get started</Text>
+            </View>
+          )}
         </View>
         <View><Text onPress={() => firebase.auth().signOut()}>SignOut</Text></View>
       </ScrollView>
