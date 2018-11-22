@@ -44,8 +44,7 @@ export default class HomeScreen extends React.Component {
         this.setState({ uid: value })
           let db = firebase.firestore();
           db.settings({ timestampsInSnapshots: true })
-          console.log(value);
-          db.collection('data').doc(`${value}`).get().then((doc) => {
+          db.collection('data').doc(`${value}`).onSnapshot((doc) => {
             if (doc.exists) {
               let data = doc.data();
               this.setState({ data: data });
