@@ -1,10 +1,12 @@
 import React from "react";
-import { ScrollView, Text, View, StyleSheet, Dimensions } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Dimensions, Platform } from "react-native";
 
 import { LinearGradient } from "expo";
 
 import { Card, TransitionImage } from "../components/AppComponents";
 import { Button } from "react-native-paper";
+import { Ionicons } from '@expo/vector-icons';
+
 import * as firebase from "firebase";
 const beforeAfter = [
   {
@@ -38,7 +40,15 @@ export default class HomeScreen extends React.Component {
         />
       ),
       headerRight: (
-        <View style={styles.addButton}><Text style={styles.plus} onPress={navigation.getParam("addPresentation")}>+</Text></View>
+        <View style={styles.addButton}>
+          <Text style={styles.plus} onPress={navigation.getParam("addPresentation")}>
+          <Ionicons
+            name={ Platform.OS === 'ios' ? `ios-add` : 'md-add'}
+            size={28}
+            color='#fff'
+          />
+          </Text>
+          </View>
       )
     };
   };
@@ -55,20 +65,20 @@ export default class HomeScreen extends React.Component {
           paddingHorizontal: 10
         }}
       >
-        <View style={{ flexDirection: 'row', justifyContent:'space-between' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           {beforeAfter.map((image, index) => {
             const Header = (
               <View style={styles.container}>
-              <Text style={styles.text}>{image.title}</Text>
+                <Text style={styles.text}>{image.title}</Text>
               </View>
             );
             return (
               <Card
                 key={`Card_${index}`}
                 header={Header}
-                body={<TransitionImage 
-                  width={(Dimensions.get('window').width/ 2)-20} 
-                  height={Dimensions.get('window').height /2.5} 
+                body={<TransitionImage
+                  width={(Dimensions.get('window').width / 2) - 20}
+                  height={Dimensions.get('window').height / 2.5}
                   images={{ before: image.before, after: image.after }} duration={image.duration} />}
                 callback={() => null}
               />
@@ -91,20 +101,23 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 35 / 2,
-    alignItems: 'center',
   },
   plus: {
     color: '#ffffff',
-    lineHeight: 35,
     fontSize: 30,
+    lineHeight: 34,
+    width: 35,
+    height: 35,
+    textAlign: 'center',
+    alignSelf: "center"
   },
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    text: {
-      width: 0,
-      flexGrow: 1,
-      flex: 1,
-    }
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    width: 0,
+    flexGrow: 1,
+    flex: 1,
+  }
 })

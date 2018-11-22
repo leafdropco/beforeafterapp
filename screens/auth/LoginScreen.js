@@ -7,6 +7,12 @@ import { LinearGradient } from "expo";
 import Colors from "../../constants/Colors";
 
 export default class LoginScreen extends React.Component {
+  static navigationOptions ={
+    headerMode: 'none',
+      headerTransitionPreset:'fade-in-place',
+      title:'test'
+  }
+
   constructor(props) {
     super(props);
     this.state = {

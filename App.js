@@ -1,13 +1,12 @@
 import React from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { AppLoading, Asset, Font } from "expo";
-import { Ionicons } from "@expo/vector-icons";
 import {
   createSwitchNavigator,
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
-
+import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from "./navigation/RootNavigation";
 import MainTabNavigator from "./navigation/MainTabNavigator";
 import { requestCameraRoll } from "./helpers/permissions";
@@ -25,6 +24,11 @@ export default class App extends React.Component {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+    Promise.all([
+      Font.loadAsync({
+        ...Ionicons.font,
+      }),
+    ]);
   }
 
   onAuthStateChanged = user => {
@@ -41,7 +45,7 @@ export default class App extends React.Component {
           Auth: RootNavigation
         },
         {
-          initialRouteName: "AuthLoading"
+          initialRouteName: "AuthLoading",
         }
       )
     );
