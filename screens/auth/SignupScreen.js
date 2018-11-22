@@ -28,13 +28,13 @@ export default class SignupScreen extends React.Component {
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(
-        () => {
+        (auth) => {
           const ref = firebase.firestore();
           ref.settings({
             timestampsInSnapshots: true,
           })
           var usersRef = ref.collection('users');
-          usersRef.add({
+          usersRef.doc(`${auth.user.uid}`).set({
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             yomiName: `${this.state.firstName} ${this.state.lastName}`,
