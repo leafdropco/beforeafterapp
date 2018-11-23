@@ -3,12 +3,12 @@ import { StyleSheet, View, Text, TextInput, Alert } from "react-native";
 import * as firebase from "firebase";
 import { LinearGradient } from "expo";
 
-import {Button} from "../../components/AppComponents";
+import { Button } from "../../components/AppComponents";
 import Colors from "../../constants/Colors";
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
-header:null,
+    header: null,
   }
 
   constructor(props) {

@@ -4,7 +4,7 @@ import { Image, View, ScrollView, StyleSheet, Text, Dimensions } from "react-nat
 import { ImagePicker, LinearGradient } from "expo";
 import { Button, DefaultTextInput } from "../components/AppComponents";
 import {Header} from "../components/AppComponents";
-export default class PresentationScreen extends React.Component {
+export default class AddPresentationScreen extends React.Component {
   static navigationOptions = {
     headerBackground: (
       <Header />
