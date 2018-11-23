@@ -9,4 +9,10 @@ export default createStackNavigator({
   Login: LoginScreen,
   Signup: SignupScreen,
   ForgotPassword: ForgotPasswordScreen
+}, {
+  transitionConfig: (sceneProps) => ({
+    transitionSpec: {
+      duration: 0,
+    },
+  })
 });
