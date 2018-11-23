@@ -1,9 +1,10 @@
 import React from "react";
 import { Image, View, ScrollView, StyleSheet, Text, Dimensions } from "react-native";
+import { ImagePicker } from "expo";
+import * as firebase from 'firebase';
 
-import { ImagePicker, LinearGradient } from "expo";
 import { Button, DefaultTextInput } from "../components/AppComponents";
-import {Header} from "../components/AppComponents";
+import { Header } from "../components/AppComponents";
 export default class AddPresentationScreen extends React.Component {
   static navigationOptions = {
     headerBackground: (
@@ -65,10 +66,10 @@ export default class AddPresentationScreen extends React.Component {
               />
             )}
           </View>
-          <View style={{ 
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center'
+          <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
           }}>
             <Button title="Save" callback={this._saveImage} />
             <Text onPress={() => this.props.navigation.navigate('Home')}>Cancel</Text>
@@ -79,9 +80,28 @@ export default class AddPresentationScreen extends React.Component {
   }
   _saveImage = () => {
     console.log("Saved!");
-    //push to home screen, the user should get a live update of their picture. 
-    // We may want to push to a presentationView /shrug
-    this.props.navigation.navigate('Home')
+    const beforeAfter = [
+      {
+        title: "Test Post",
+        before:
+          'https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae4520846654cd8e84b23/1509614691763/OliviaBossertPhotography+%28108+of+191%29.jpg?format=1500w',
+        after:
+          'https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae46b24a694220a87bccc/1509614716315/OliviaBossertPhotography+%281+of+1%29.jpg?format=1500w',
+        duration: 3000,
+      }
+    ];
+    // const value = await AsyncStorage.getItem('userId');
+    // if (value !== null) {
+
+    //   const ref = firebase.firestore();
+    //   ref.settings({
+    //     timestampsInSnapshots: true,
+    //   });
+    //   var usersRef = ref.collection('data').doc(`${value}`);
+    //   //push to home screen, the user should get a live update of their picture. 
+    //   // We may want to push to a presentationView /shrug
+    //   this.props.navigation.navigate('Home')
+    // }
   }
   _pickBeforeImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
