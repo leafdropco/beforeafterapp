@@ -8,8 +8,8 @@ import Colors from "../../constants/Colors";
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
-    header: null,
-  }
+    header: null
+  };
 
   constructor(props) {
     super(props);
@@ -18,9 +18,8 @@ export default class LoginScreen extends React.Component {
       password: ""
     };
     if (this.props.screenProps.isAuthenticated) {
-      this.props.navigation.navigate('App')
+      this.props.navigation.navigate("App");
     }
-
   }
 
   onLoginPress = () => {
@@ -28,8 +27,7 @@ export default class LoginScreen extends React.Component {
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(
-        () => {
-        },
+        () => {},
         error => {
           Alert.alert(error.message);
         }
@@ -64,7 +62,13 @@ export default class LoginScreen extends React.Component {
             </Text>
             <View style={{ flexGrow: 1 }} />
             <View
-              style={{ marginLeft: 20, marginRight: 20, flexDirection: "row", width: "100%", justifyContent: 'space-between' }}
+              style={{
+                marginLeft: 20,
+                marginRight: 20,
+                flexDirection: "row",
+                width: "100%",
+                justifyContent: "space-between"
+              }}
             >
               <View
                 style={{
@@ -116,10 +120,7 @@ export default class LoginScreen extends React.Component {
             autoCorrect={false}
           />
 
-          <Button
-            title='Sign In'
-            callback={this.onLoginPress}
-          />
+          <Button title="Sign In" callback={this.onLoginPress} />
 
           <View style={{ marginTop: 30 }}>
             <Text

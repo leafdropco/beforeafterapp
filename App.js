@@ -1,17 +1,13 @@
 import React from "react";
-import { AsyncStorage } from "react-native"
 import { Font } from "expo";
-import {
-  createSwitchNavigator,
-  createAppContainer,
-} from "react-navigation";
-import { Ionicons } from '@expo/vector-icons';
+import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import { Ionicons } from "@expo/vector-icons";
 import RootNavigation from "./navigation/RootNavigation";
 import MainTabNavigator from "./navigation/MainTabNavigator";
 import { requestCameraRoll } from "./helpers/permissions";
 import AuthLoadingScreen from "./screens/auth/AuthLoadingScreen";
 import ApiKeys from "./constants/ApiKeys";
-import * as firebase from "firebase"
+import * as firebase from "firebase";
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -22,12 +18,12 @@ export default class App extends React.Component {
     if (!firebase.apps.length) {
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
-    requestCameraRoll()
+    requestCameraRoll();
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
     Promise.all([
       Font.loadAsync({
-        ...Ionicons.font,
-      }),
+        ...Ionicons.font
+      })
     ]);
   }
 
@@ -35,7 +31,7 @@ export default class App extends React.Component {
     this.setState({ isAuthenticationReady: true });
     this.setState({ isAuthenticated: !!user });
     if (user && user.uid != null) {
-      AsyncStorage.setItem('userId', user.uid);
+      this.setState({ uid: user.uid });
     }
   };
 
@@ -48,10 +44,17 @@ export default class App extends React.Component {
           Auth: RootNavigation
         },
         {
-          initialRouteName: "AuthLoading",
+          initialRouteName: "AuthLoading"
         }
       )
     );
-    return <T screenProps={{ authed: this.state.isAuthenticated }} />;
+    return (
+      <T
+        screenProps={{
+          authed: this.state.isAuthenticated,
+          uid: this.state.uid
+        }}
+      />
+    );
   }
 }
