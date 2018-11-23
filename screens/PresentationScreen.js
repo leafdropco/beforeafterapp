@@ -1,19 +1,15 @@
 import React from "react";
-import { Button, Image, View, ScrollView, StyleSheet } from "react-native";
+import { Image, View, ScrollView, StyleSheet, Text, Dimensions } from "react-native";
 
 import { ImagePicker, LinearGradient } from "expo";
-import { TransitionImage, DefaultTextInput } from "../components/AppComponents";
-import * as Expo from "expo";
+import { Button, DefaultTextInput } from "../components/AppComponents";
+import {Header} from "../components/AppComponents";
 export default class PresentationScreen extends React.Component {
   static navigationOptions = {
     headerBackground: (
-      <LinearGradient
-        colors={["#05809D", "#0AC9D9"]}
-        style={{ width: `100%`, height: `100%`, alignItems: "center" }}
-        start={{ x: 0, y: 1 }}
-        end={{ x: 1, y: 1 }}
-      />
-    )
+      <Header />
+    ),
+    headerLeft: null,
   };
   state = {
     before: null,
@@ -25,51 +21,71 @@ export default class PresentationScreen extends React.Component {
       <ScrollView style={styles.scrollView}>
         <View>
           <DefaultTextInput placeholder="Presentation Name" />
-          <View style={{ flexDirection: "row", justifyContent:'space-between' }}>
-            <View style={{width:`45%`}}>
-              <DefaultTextInput placeholder="Before" />
+          <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
+            <View style={{ width: `45%` }}>
+              <Button title="Before" callback={this._pickBeforeImage} />
             </View>
             <View></View>
-            <View style={{width:`45%`}}>
-              <DefaultTextInput placeholder="After" />
+            <View style={{ width: `45%` }}>
+              <Button title="After" callback={this._pickAfterImage} />
             </View>
           </View>
-          {!before && (
-            <Button title="Add Before Photo" onPress={this._pickBeforeImage} />
-          )}
-          {before && !after && (
-            <Button title="Add After Photo" onPress={this._pickAfterImage} />
-          )}
-          <View style={{ display: "flex" }}>
+
+          <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
             {before && (
               <Image
                 source={{ uri: before }}
-                style={{ width: 50, height: 50 }}
+                style={{
+                  width: (Dimensions.get('window').width / 2) - 20,
+                  height: Dimensions.get('window').height / 2.5,
+                  shadowColor: '#000000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3
+                  },
+                  shadowRadius: 5,
+                  shadowOpacity: 1.0
+                }}
               />
             )}
             {after && (
               <Image
                 source={{ uri: after }}
-                style={{ width: 50, height: 50 }}
+                style={{
+                  width: (Dimensions.get('window').width / 2) - 20,
+                  height: Dimensions.get('window').height / 2.5,
+                  shadowColor: '#000000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 3
+                  },
+                  shadowRadius: 5,
+                  shadowOpacity: 1.0
+                }}
               />
             )}
           </View>
-          {before && after && (
-            <View>
-              <TransitionImage
-                duration={1000}
-                images={{ before: before, after: after }}
-              />
-            </View>
-          )}
+          <View style={{ 
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center'
+          }}>
+            <Button title="Save" callback={this._saveImage} />
+            <Text onPress={() => this.props.navigation.navigate('Home')}>Cancel</Text>
+          </View>
         </View>
       </ScrollView>
     );
   }
-
+  _saveImage = () => {
+    console.log("Saved!");
+    //push to home screen, the user should get a live update of their picture. 
+    // We may want to push to a presentationView /shrug
+    this.props.navigation.navigate('Home')
+  }
   _pickBeforeImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3]
     });
 

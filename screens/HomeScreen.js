@@ -1,28 +1,19 @@
 import React from "react";
 import { ScrollView, Text, View, StyleSheet, Dimensions, Platform, AsyncStorage } from "react-native";
-
-import { LinearGradient } from "expo";
-
-import { Card, TransitionImage } from "../components/AppComponents";
-import { Button } from "react-native-paper";
 import { Ionicons } from '@expo/vector-icons';
-
 import * as firebase from "firebase";
 import "firebase/firestore";
 
+import { Header, Card, TransitionImage } from "../components/AppComponents";
+
 export default class HomeScreen extends React.Component {
-  state={
-    uid:null,
+  state = {
+    uid: null,
   }
   static navigationOptions = ({ navigation }) => {
     return {
       headerBackground: (
-        <LinearGradient
-          colors={["#05809D", "#0AC9D9"]}
-          style={{ width: `100%`, height: `100%`, alignItems: "center" }}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 1 }}
-        />
+        <Header />
       ),
       headerRight: (
         <View style={styles.addButton}>
@@ -42,21 +33,21 @@ export default class HomeScreen extends React.Component {
       const value = await AsyncStorage.getItem('userId');
       if (value !== null) {
         this.setState({ uid: value })
-          let db = firebase.firestore();
-          db.settings({ timestampsInSnapshots: true })
-          db.collection('data').doc(`${value}`).onSnapshot((doc) => {
-            if (doc.exists) {
-              let data = doc.data();
-              this.setState({ data: data });
-              console.log("Document data:", data);
-            } else {
-              this.setState({ data: null });
-              console.log("No such document!");
-            }
-          }).catch(function (error) {
+        let db = firebase.firestore();
+        db.settings({ timestampsInSnapshots: true })
+        db.collection('data').doc(`${value}`).onSnapshot((doc) => {
+          if (doc.exists) {
+            let data = doc.data();
+            this.setState({ data: data });
+            console.log("Document data:", data);
+          } else {
             this.setState({ data: null });
-            console.log("Error getting document:", error);
-          });
+            console.log("No such document!");
+          }
+        }).catch(function (error) {
+          this.setState({ data: null });
+          console.log("Error getting document:", error);
+        });
       }
     } catch (error) {
       console.log("There was an error")

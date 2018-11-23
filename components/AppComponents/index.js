@@ -5,4 +5,6 @@ import PhoneButton from './PhoneButton';
 import TransitionImage from "./TransitionImage";
 import Card from "./Card";
 import DefaultTextInput from "./TextInput";
-export { DefaultTextInput, TestComponent, EmailTextInput, PasswordTextInput, PhoneButton, TransitionImage, Card };
+import Button from "./Button";
+import Header from "./Header";
+export { Header, Button, DefaultTextInput, TestComponent, EmailTextInput, PasswordTextInput, PhoneButton, TransitionImage, Card };
