@@ -1,16 +1,14 @@
 import React from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
-import { NavigationActions } from "react-navigation";
+import { StyleSheet, View, Text, TextInput, Alert } from "react-native";
 import * as firebase from "firebase";
 import { LinearGradient } from "expo";
 
+import {Button} from "../../components/AppComponents";
 import Colors from "../../constants/Colors";
 
 export default class LoginScreen extends React.Component {
-  static navigationOptions ={
-    headerMode: 'none',
-      headerTransitionPreset:'fade-in-place',
-      title:'test'
+  static navigationOptions = {
+header:null,
   }
 
   constructor(props) {
@@ -42,7 +40,6 @@ export default class LoginScreen extends React.Component {
       <View
         style={{
           height: `100%`,
-          display: "flex",
           flexDirection: "column",
           backgroundColor: "white"
         }}
@@ -119,14 +116,10 @@ export default class LoginScreen extends React.Component {
             autoCorrect={false}
           />
 
-          <View style={styles.button}>
-            <Text
-              style={{ color: "#0AC9D9", textAlign: "center", padding: 15 }}
-              onPress={this.onLoginPress}
-            >
-              Sign In
-            </Text>
-          </View>
+          <Button
+            title='Sign In'
+            callback={this.onLoginPress}
+          />
 
           <View style={{ marginTop: 30 }}>
             <Text
@@ -151,19 +144,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: Colors.inputBorder,
     padding: 15,
-    marginBottom: 20,
-    shadowOffset: { width: 0, height: 0 },
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowRadius: 3
-  },
-  button: {
-    width: 110,
-    color: Colors.inputBorder,
-    backgroundColor: `#fff`,
-    borderWidth: 3,
-    borderRadius: 30,
-    borderColor: Colors.inputBorder,
     marginBottom: 20,
     shadowOffset: { width: 0, height: 0 },
     shadowColor: "#000",
