@@ -23,14 +23,13 @@ export default class AddPresentationScreen extends React.Component {
   state = {
     before: null,
     after: null,
-    title: null
+    title: 'My Presentation'
   };
   componentDidMount() {
     this._getCurrentPresentations();
   }
   _getCurrentPresentations = () => {
     const { authed, uid } = this.props.screenProps;
-
     if (authed && uid != null) {
       let db = firebase.firestore();
       db.settings({ timestampsInSnapshots: true });
@@ -47,6 +46,9 @@ export default class AddPresentationScreen extends React.Component {
     }
   };
   _urlToBlob(url) {
+    // this function is a stop gap until the real issue is resolved in react-native:
+    // https://github.com/facebook/react-native/pull/22063
+
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
       xhr.onerror = reject;
@@ -61,57 +63,53 @@ export default class AddPresentationScreen extends React.Component {
     });
   }
 
-  _uploadImageAsync = async (uri, location) => {
-    const blob = this._urlToBlob(uri);
+  _uploadImageAsync = async (uri, location, callback) => {
     const ref = firebase
       .storage()
       .ref()
       .child(location);
-    const snapshot = await ref.put(blob);
-    return snapshot.downloadURL;
+    this._urlToBlob(uri).then((d) => {
+      ref.put(d).then(t => {
+        t.ref.getDownloadURL().then((downloadURL) => callback(downloadURL))
+      });
+    });
   };
   _saveImage = () => {
     const { authed, uid } = this.props.screenProps;
-    const { before, after } = this.state;
-    if (before != null && after != null && title != null) {
-      if (authed && uid != null) {
-        let db = firebase.firestore();
-        db.settings({ timestampsInSnapshots: true });
-        db.collection("data")
-          .doc(`${uid}`)
-          .set({
-            presentations:
-              this.state.data && this.state.data.presentations
-                ? this.state.data.presentations.concat({
-                    title: "Test Post",
-                    before:
-                      "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae4520846654cd8e84b23/1509614691763/OliviaBossertPhotography+%28108+of+191%29.jpg?format=1500w",
-                    after:
-                      "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae46b24a694220a87bccc/1509614716315/OliviaBossertPhotography+%281+of+1%29.jpg?format=1500w",
-                    duration: 3000,
-                    createdOn: firebase.database.ServerValue.TIMESTAMP
-                  })
-                : [
-                    {
-                      title: "Test Post",
-                      before:
-                        "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae4520846654cd8e84b23/1509614691763/OliviaBossertPhotography+%28108+of+191%29.jpg?format=1500w",
-                      after:
-                        "https://static1.squarespace.com/static/585174d6893fc0a6ea9567ab/t/59fae46b24a694220a87bccc/1509614716315/OliviaBossertPhotography+%281+of+1%29.jpg?format=1500w",
-                      duration: 3000,
-                      createdOn: firebase.database.ServerValue.TIMESTAMP
-                    }
-                  ]
-          });
-      }
-    } else {
+    if (this.state.before != null && this.state.after != null && this.state.title != null) {
+      console.log("saving", this.state.title)
+      let db = firebase.firestore();
+      db.settings({ timestampsInSnapshots: true });
+      db.collection("data")
+        .doc(`${uid}`)
+        .set({
+          presentations:
+            this.state.data && this.state.data.presentations
+              ? this.state.data.presentations.concat({
+                title: this.state.title,
+                before: this.state.before,
+                after: this.state.after,
+                duration: 3000,
+                createdOn: firebase.database.ServerValue.TIMESTAMP
+              })
+              : [
+                {
+                  title: this.state.title,
+                  before: this.state.before,
+                  after: this.state.after,
+                  duration: 3000,
+                  createdOn: firebase.database.ServerValue.TIMESTAMP
+                }
+              ]
+        });
+    }
+    else {
       Alert.alert("Sorry, you can create an empty Presentation");
     }
   };
 
-  _pickBeforeImage = async () => {
+  _pickImage = async (type, callback) => {
     const { authed, uid } = this.props.screenProps;
-
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: false,
@@ -119,27 +117,13 @@ export default class AddPresentationScreen extends React.Component {
       });
 
       if (!result.cancelled && authed && uid != null) {
-        let imageUrl = this._uploadImageAsync(
+        await this._uploadImageAsync(
           result.uri,
-          `data/${uid}/${uuid()}_before.jpg`
+          `data/${uid}/${uuid()}_${type}.jpg`,
+          (imageUrl) => callback(imageUrl)
         );
-        this.setState({ before: imageUrl });
       }
-    } catch {}
-  };
-  _pickAfterImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: false,
-      aspect: [4, 3]
-    });
-
-    if (!result.cancelled && authed && uid != null) {
-      let imageUrl = this._uploadImageAsync(
-        result.uri,
-        `data/${uid}/${uuid()}_after.jpg`
-      );
-      this.setState({ after: imageUrl });
-    }
+    } catch { }
   };
 
   render() {
@@ -149,55 +133,49 @@ export default class AddPresentationScreen extends React.Component {
         <View>
           <DefaultTextInput
             placeholder="Presentation Name"
-            onChange={value => this.setState({ title: value })}
+            value={this.state.title}
+            onChangeText={text => {
+              this.setState({ title: text });
+            }}
           />
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <View style={{ width: `45%` }}>
-              <Button title="Before" callback={this._pickBeforeImage} />
+              <Button title="Before" callback={() => this._pickImage('before', (imageUrl) => this.setState({ before: imageUrl }))} />
+              {this.state.before != null && (<Image source={{ uri: this.state.before }}
+                style={{
+                  width: Dimensions.get("window").width / 2 - 20,
+                  height: Dimensions.get("window").height / 2.5,
+                  shadowColor: "#000000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 3
+                  },
+                  shadowRadius: 5,
+                  shadowOpacity: 1.0
+                }} />)}
             </View>
             <View />
             <View style={{ width: `45%` }}>
-              <Button title="After" callback={this._pickAfterImage} />
+              <Button title="After" callback={() => this._pickImage('after', (imageUrl) => this.setState({ after: imageUrl }))} />
+              {this.state.after != null && (<Image source={{ uri: this.state.after }}
+                style={{
+                  width: Dimensions.get("window").width / 2 - 20,
+                  height: Dimensions.get("window").height / 2.5,
+                  shadowColor: "#000000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 3
+                  },
+                  shadowRadius: 5,
+                  shadowOpacity: 1.0
+                }} />)}
             </View>
           </View>
-
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            {/* {before && (
-              <Image
-                source={{ uri: before }}
-                style={{
-                  width: Dimensions.get("window").width / 2 - 20,
-                  height: Dimensions.get("window").height / 2.5,
-                  shadowColor: "#000000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 3
-                  },
-                  shadowRadius: 5,
-                  shadowOpacity: 1.0
-                }}
-              />
-            )}
-            {after && (
-              <Image
-                source={{ uri: after }}
-                style={{
-                  width: Dimensions.get("window").width / 2 - 20,
-                  height: Dimensions.get("window").height / 2.5,
-                  shadowColor: "#000000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 3
-                  },
-                  shadowRadius: 5,
-                  shadowOpacity: 1.0
-                }}
-              />
-            )} */}
           </View>
           <View
             style={{

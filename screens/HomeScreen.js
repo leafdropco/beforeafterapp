@@ -56,6 +56,7 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.setParams({ addPresentation: this.addPresentation });
     this._getPresentations();
   }
+  
   render() {
     return (
       <ScrollView
