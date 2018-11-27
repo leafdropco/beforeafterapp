@@ -44,6 +44,12 @@ export default class HomeScreen extends React.Component {
         .onSnapshot(doc => {
           if (doc.exists) {
             let data = doc.data();
+            function compare(a, b) {
+              return a.createdOn > b.createdOn ? -1 :
+                a.createdOn < b.createdOn ?
+                  1 : 0;
+            }
+            data.presentations.sort(compare)
             this.setState({ data: data });
           } else {
             this.setState({ data: null });
@@ -56,7 +62,7 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.setParams({ addPresentation: this.addPresentation });
     this._getPresentations();
   }
-  
+
   render() {
     return (
       <ScrollView
@@ -67,7 +73,7 @@ export default class HomeScreen extends React.Component {
           paddingHorizontal: 10
         }}
       >
-        <View style={{ flexDirection: "row", justifyContent: "space-between", flexWrap:'wrap' }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", flexWrap: 'wrap' }}>
           {this.state &&
             this.state.data &&
             this.state.data.presentations &&

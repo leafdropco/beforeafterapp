@@ -90,7 +90,7 @@ export default class AddPresentationScreen extends React.Component {
                 before: this.state.before,
                 after: this.state.after,
                 duration: 3000,
-                createdOn: firebase.database.ServerValue.TIMESTAMP
+                createdOn: new Date(),
               })
               : [
                 {
@@ -98,7 +98,7 @@ export default class AddPresentationScreen extends React.Component {
                   before: this.state.before,
                   after: this.state.after,
                   duration: 3000,
-                  createdOn: firebase.database.ServerValue.TIMESTAMP
+                  createdOn:  new Date()
                 }
               ]
         });
