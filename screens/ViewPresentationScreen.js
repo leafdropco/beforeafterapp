@@ -9,6 +9,7 @@ import "firebase/firestore";
 import { TransitionImage, FullScreenPresentation } from "../components/AppComponents";
 
 export default class ViewPresentationScreen extends React.Component{
+    static navigationOptions = { header: null };
 
     constructor(props){
         super(props)
@@ -18,12 +19,17 @@ export default class ViewPresentationScreen extends React.Component{
     }
 
 
-
     componentDidMount() {
+        console.log(this.props.navigation.state.params.data)
+        //this.setState({uid: this.props.navigation.state.params.data})
+    }
+
+    changePage(screen) {
+        this.props.navigation.navigate(screen)
+        console.log(screen)
     }
 
     render(){
-        console.log(this.state.uid[1])
      return(
          <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
              <FullScreenPresentation
@@ -34,7 +40,7 @@ export default class ViewPresentationScreen extends React.Component{
 
              <View style={{height: '10%', width: '100%', backgroundColor: '#000', position: 'absolute', bottom: 0, zIndex:999, padding: 10}}>
                  <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                     <Text style={{paddingLeft: 20}}>
+                     <Text style={{paddingLeft: 20}} onPress={() => {this.changePage('Home')}}>
                          <Ionicons
                              name={Platform.OS === "ios" ? `ios-arrow-back` : "md-arrow-back"}
                              size={36}

@@ -25,7 +25,6 @@ export default class SignupScreen extends React.Component {
       Alert.alert('Passwords do not match');
       return;
     }
-
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -129,7 +128,7 @@ export default class SignupScreen extends React.Component {
             autoCorrect={true}
           />
 
-          <Button onPress={this.onSignupPress} title='Sign Up' />
+          <Button callback={this.onSignupPress} title='Sign Up' />
 
         </View>
       </View >

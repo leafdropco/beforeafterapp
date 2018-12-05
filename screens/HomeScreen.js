@@ -30,7 +30,8 @@ export default class HomeScreen extends React.Component {
             />
           </Text>
         </View>
-      )
+      ),
+      headerMode: (navigation.state.params && navigation.state.params.shouldHide) ? "none" : "float",
     };
   };
   _getPresentations = async () => {
@@ -58,6 +59,7 @@ export default class HomeScreen extends React.Component {
     }
   };
   componentDidMount() {
+    this.props.navigation.setParams({ shouldHide: true });
     this.props.navigation.setParams({ addPresentation: this.addPresentation });
     this._getPresentations();
   }
@@ -116,7 +118,10 @@ export default class HomeScreen extends React.Component {
 
     );
   }
-    addPresentation = () => this.props.navigation.navigate("AddPresentation");
+    addPresentation = () => {
+      this.props.navigation.setParams({ shouldHide: true });
+      this.props.navigation.navigate("AddPresentation");
+    }
     goToViewPresentation = (pres) => {
         this.props.navigation.navigate("ViewPresentation", {data: pres})
     }
