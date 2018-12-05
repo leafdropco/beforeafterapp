@@ -6,12 +6,12 @@ export default class Header extends React.Component {
         return (
             <LinearGradient
                 colors={["#05809D", "#0AC9D9"]}
-                style={{ width: `100%`, height: `100%` }}
+                style={{ width: `100%` }}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 1 }}
             >
                 <View style={{
-                    marginLeft: 10, flexDirection: 'column', height: `100%`, justifyContent: 'center'
+                    marginLeft: 10, flexDirection: 'column', height: `100%`, justifyContent: 'flex-end', paddingBottom: "15%"
                 }}>
                     <Text>
                         <Text style={{ fontSize: 20, color: '#ffffff' }}>Before /</Text>

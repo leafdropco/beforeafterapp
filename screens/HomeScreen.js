@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   Platform,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as firebase from "firebase";
@@ -21,12 +21,11 @@ export default class HomeScreen extends React.Component {
       headerRight: (
         <View style={styles.addButton}>
           <Text
-            style={styles.plus}
             onPress={navigation.getParam("addPresentation")}
           >
             <Ionicons
-              name={Platform.OS === "ios" ? `ios-add` : "md-add"}
-              size={28}
+              name={Platform.OS === "ios" ? `ios-add-circle` : "md-add-circle"}
+              size={36}
               color="#fff"
             />
           </Text>
@@ -65,82 +64,80 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          paddingVertical: 50,
-          paddingHorizontal: 10
-        }}
-      >
-        <View style={{ flexDirection: "row", justifyContent: "space-between", flexWrap: 'wrap' }}>
-          {this.state &&
-            this.state.data &&
-            this.state.data.presentations &&
-            this.state.data.presentations.map((image, index) => {
-              const Header = (
-                <View style={styles.container}>
-                  <Text style={styles.text}>{image.title}</Text>
-                </View>
-              );
-              return (
-                <Card
-                  key={`Card_${index}`}
-                  header={Header}
-                  body={
-                    <TransitionImage
-                      width={Dimensions.get("window").width / 2 - 20}
-                      height={Dimensions.get("window").height / 2.5}
-                      images={{ before: image.before, after: image.after }}
-                      duration={image.duration}
-                    />
-                  }
-                  callback={() => null}
-                />
-              );
-            })}
-          {this.state && this.state.data == null && (
-            <View>
-              <Text>Looks like you don't have any presentations...</Text>
-              <Text>Click the plus button to get started</Text>
-            </View>
-          )}
+    <View>
+        <ScrollView
+          style={{
+            flex: 'grow',
+            flexDirection: "column",
+            paddingVertical: 50,
+            paddingHorizontal: 10,
+              height: "100%"
+          }}
+        >
+          <View style={{ flexDirection: "row", justifyContent: "space-between", flexWrap: 'wrap' }}>
+            {this.state &&
+              this.state.data &&
+              this.state.data.presentations &&
+              this.state.data.presentations.map((image, index) => {
+                const Header = (
+                  <View style={styles.container}>
+                    <Text style={styles.text} onPress={()=>this.goToViewPresentation([image.after, image.before, image.title, image.duration])}>{image.title}</Text>
+                    <Text style={styles.para} onPress={()=>this.goToViewPresentation([image.after, image.before, image.title, image.duration])}>[Date]</Text>
+                  </View>
+                );
+                return (
+                  <Card
+                    key={`Card_${index}`}
+                    header={Header}
+                    body={
+                      <TransitionImage
+                        width={Dimensions.get("window").width / 2 - 20}
+                        height={Dimensions.get("window").height / 2.5}
+                        images={{ before: image.before, after: image.after }}
+                        duration={image.duration}
+                      />
+                    }
+                    callback={() => null}
+                  />
+                );
+              })}
+            {this.state && this.state.data == null && (
+              <View>
+                <Text>Looks like you don't have any presentations...</Text>
+                <Text>Click the plus button to get started</Text>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+        <View style={{position: "fixed", width: 75, bottom: 50, left: 0, backgroundColor: "#05809D", borderBottomRightRadius: 25, borderTopRightRadius: 25, padding: 10}}>
+            <Text style={{color: "#fff"}} onPress={() => firebase.auth().signOut()}>SignOut</Text>
         </View>
-        <View>
-          <Text onPress={() => firebase.auth().signOut()}>SignOut</Text>
-        </View>
-      </ScrollView>
+      </View>
+
     );
   }
-  addPresentation = () => this.props.navigation.navigate("AddPresentation");
+    addPresentation = () => this.props.navigation.navigate("AddPresentation");
+    goToViewPresentation = (pres) => {
+        this.props.navigation.navigate("ViewPresentation", {data: pres})
+    }
 }
 const styles = StyleSheet.create({
   addButton: {
-    backgroundColor: "#37809A",
-    color: "#ffffff",
-    marginRight: 20,
-    borderColor: "#82C3D1",
-    borderWidth: 2,
-    width: 35,
-    height: 35,
-    borderRadius: 35 / 2
-  },
-  plus: {
-    color: "#ffffff",
-    fontSize: 30,
-    lineHeight: 34,
-    width: 35,
-    height: 35,
-    textAlign: "center",
-    alignSelf: "center"
+      paddingRight: 10,
+      paddingBottom: "10%",
+      alignSelf: "flex-end"
   },
   container: {
-    flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+      width: "100%",
+      padding: 10,
+      backgroundColor: "#fff",
   },
   text: {
-    width: 0,
-    flexGrow: 1,
-    flex: 1
-  }
+      color: "#05809D",
+      fontWeight: "bold",
+  },
+    para: {
+        color: "#05809D",
+    }
 });

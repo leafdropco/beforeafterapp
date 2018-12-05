@@ -5,13 +5,11 @@ export default class Card extends React.Component {
     render() {
         const { header, body } = this.props;
         return (<View style={{
-            shadowColor: '#000000',
-            shadowOffset: {
-                width: 0,
-                height: 3
-            },
-            shadowRadius: 5,
-            shadowOpacity: 1.0
+                shadowOffset: { width: 0, height: 0 },
+                shadowColor: "#000",
+                shadowOpacity: 0.3,
+                shadowRadius: 3,
+                marginBottom: 20
         }}>
             <View>
                 <View>

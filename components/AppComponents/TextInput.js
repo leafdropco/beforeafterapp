@@ -14,7 +14,7 @@ export default class DefaultTextInput extends React.Component {
 }
 const styles = StyleSheet.create({
     input: {
-        color: Colors.inputBorder,
+        color: Colors.color,
         width: `100%`,
         backgroundColor: `#fff`,
         borderWidth: 3,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         shadowOffset: { width: 0, height: 0 },
         shadowColor: "#000",
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.2,
         shadowRadius: 3
     }
 })

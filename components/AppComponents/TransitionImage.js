@@ -6,7 +6,7 @@ export default class TransitionImage extends React.Component {
     fadeAnim: new Animated.Value(0),
     shouldAnimate: false,
   };
- 
+
   touchStart = () => {
     Animated.timing(this.state.fadeAnim, {
       toValue: 1,
@@ -24,7 +24,7 @@ export default class TransitionImage extends React.Component {
       <View
         onTouchStart={this.touchStart}
         onTouchEnd={this.touchEnd}
-        style={{ flex: 1 }}>
+        style={{ flex: 1}}>
         <Animated.Image
           source={{ uri: this.props.images.before }}
           style={{

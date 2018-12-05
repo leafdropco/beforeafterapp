@@ -7,4 +7,5 @@ import Card from "./Card";
 import DefaultTextInput from "./TextInput";
 import Button from "./Button";
 import Header from "./Header";
-export { Header, Button, DefaultTextInput, TestComponent, EmailTextInput, PasswordTextInput, PhoneButton, TransitionImage, Card };
+import FullScreenPresentation from "./FullScreenPresentation";
+export { Header, Button, DefaultTextInput, TestComponent, EmailTextInput, PasswordTextInput, PhoneButton, TransitionImage, Card, FullScreenPresentation };

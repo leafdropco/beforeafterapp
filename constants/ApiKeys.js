@@ -1,10 +1,10 @@
 export default {
 	FirebaseConfig: {
-    apiKey: "AIzaSyD3fEcxy0fYAVDJbFz1NPiyRl_sSMe5Tms",
-    authDomain: "beforeafter-920ad.firebaseapp.com",
-    databaseURL: "https://beforeafter-920ad.firebaseio.com",
-    projectId: "beforeafter-920ad",
-    storageBucket: "beforeafter-920ad.appspot.com",
-    messagingSenderId: "175583505144"
+        apiKey: "AIzaSyBqu7gIBjAyDVX4qCA1IFL-t6uciFADpU8",
+        authDomain: "beforeafter2-aa9a8.firebaseapp.com",
+        databaseURL: "https://beforeafter2-aa9a8.firebaseio.com",
+        projectId: "beforeafter2-aa9a8",
+        storageBucket: "beforeafter2-aa9a8.appspot.com",
+        messagingSenderId: "675870098107"
 	}
 }

@@ -15,6 +15,9 @@ import "firebase/firestore";
 import { Button, DefaultTextInput } from "../components/AppComponents";
 import { Header } from "../components/AppComponents";
 import { uuid } from "../helpers/uuid";
+import { LinearGradient } from "expo";
+import ButtonSecondary from "../components/AppComponents/ButtonSecondary";
+
 export default class AddPresentationScreen extends React.Component {
   static navigationOptions = {
     headerBackground: <Header />,
@@ -89,7 +92,7 @@ export default class AddPresentationScreen extends React.Component {
                 title: this.state.title,
                 before: this.state.before,
                 after: this.state.after,
-                duration: 3000,
+                duration: 300,
                 createdOn: new Date(),
               })
               : [
@@ -97,11 +100,12 @@ export default class AddPresentationScreen extends React.Component {
                   title: this.state.title,
                   before: this.state.before,
                   after: this.state.after,
-                  duration: 3000,
+                  duration: 300,
                   createdOn:  new Date()
                 }
               ]
         });
+        this.props.navigation.navigate("Home")
     }
     else {
       Alert.alert("Sorry, you can create an empty Presentation");
@@ -130,6 +134,18 @@ export default class AddPresentationScreen extends React.Component {
     let { before, after } = this.state;
     return (
       <ScrollView style={styles.scrollView}>
+        <LinearGradient
+            colors={["#05809D", "#0AC9D9"]}
+            style={styles.title}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
+        >
+          <Text>
+            <Text style={{ fontSize: 16, color: '#ffffff' }}>New </Text>
+            <Text style={{ fontSize: 16, color: '#ffffff', fontWeight: 'bold' }}>Presentation</Text>
+          </Text>
+        </LinearGradient>
+
         <View>
           <DefaultTextInput
             placeholder="Presentation Name"
@@ -139,10 +155,10 @@ export default class AddPresentationScreen extends React.Component {
             }}
           />
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{ flexDirection: "row", justifyContent: "space-between", }}
           >
-            <View style={{ width: `45%` }}>
-              <Button title="Before" callback={() => this._pickImage('before', (imageUrl) => this.setState({ before: imageUrl }))} />
+            <View style={{ width: `45%`, alignItems: "center" }}>
+              <ButtonSecondary title="Add Before" callback={() => this._pickImage('before', (imageUrl) => this.setState({ before: imageUrl }))} />
               {this.state.before != null && (<Image source={{ uri: this.state.before }}
                 style={{
                   width: Dimensions.get("window").width / 2 - 20,
@@ -154,11 +170,12 @@ export default class AddPresentationScreen extends React.Component {
                   },
                   shadowRadius: 5,
                   shadowOpacity: 1.0
-                }} />)}
+                }} />)
+              }
             </View>
             <View />
-            <View style={{ width: `45%` }}>
-              <Button title="After" callback={() => this._pickImage('after', (imageUrl) => this.setState({ after: imageUrl }))} />
+            <View style={{ width: `45%`, alignItems: "center" }}>
+              <ButtonSecondary title="Add After" callback={() => this._pickImage('after', (imageUrl) => this.setState({ after: imageUrl }))} />
               {this.state.after != null && (<Image source={{ uri: this.state.after }}
                 style={{
                   width: Dimensions.get("window").width / 2 - 20,
@@ -179,26 +196,46 @@ export default class AddPresentationScreen extends React.Component {
           </View>
           <View
             style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center"
+              height: 150,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+                bottom: 0
             }}
           >
-            <Button title="Save" callback={this._saveImage} />
-            <Text onPress={() => this.props.navigation.navigate("Home")}>
-              Cancel
-            </Text>
+              <Button title="Cancel" callback={() => this.props.navigation.navigate("Home")} />
+              <If condition={this.state.before != null && this.state.after != null}>
+                <Button title="Save" callback={this._saveImage} />
+              </If>
           </View>
         </View>
       </ScrollView>
     );
   }
 }
+const If = (props) => {
+    if (props.condition) {
+        return (
+            <View>
+                {props.children}
+            </View>
+        )
+    }
+    return null
+}
+
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     flexDirection: "column",
-    paddingVertical: 50,
+    paddingVertical: 20,
     paddingHorizontal: 10
+  },
+  title: {
+      paddingLeft: 25,
+      paddingVertical: 10,
+      width: 200,
+      marginBottom: 20,
+      marginLeft: -20,
   }
 });
