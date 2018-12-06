@@ -40,7 +40,8 @@ export default class ViewPresentationScreen extends React.Component{
 
              <View style={{height: '10%', width: '100%', backgroundColor: '#000', position: 'absolute', bottom: 0, zIndex:999, padding: 10}}>
                  <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                     <Text style={{paddingLeft: 20}} onPress={() => {this.changePage('HomeScreen')}}>
+                     <Text style={{paddingLeft: 20}} onPress={() => {this.changePage('Home')}}>
+
                          <Ionicons
                              name={Platform.OS === "ios" ? `ios-arrow-back` : "md-arrow-back"}
                              size={36}

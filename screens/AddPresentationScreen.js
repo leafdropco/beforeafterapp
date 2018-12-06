@@ -2,7 +2,7 @@ import React from "react";
 import {
   Image,
   View,
-  ScrollView,
+  SafeAreaView,
   StyleSheet,
   Text,
   Dimensions,
@@ -20,8 +20,8 @@ import ButtonSecondary from "../components/AppComponents/ButtonSecondary";
 
 export default class AddPresentationScreen extends React.Component {
   static navigationOptions = {
-    headerBackground: <Header />,
-    headerLeft: null
+    headerLeft: null,
+    header:null,
   };
   state = {
     before: null,
@@ -133,7 +133,7 @@ export default class AddPresentationScreen extends React.Component {
   render() {
     let { before, after } = this.state;
     return (
-      <ScrollView style={styles.scrollView}>
+      <SafeAreaView style={styles.scrollView}>
         <LinearGradient
             colors={["#05809D", "#0AC9D9"]}
             style={styles.title}
@@ -209,7 +209,7 @@ export default class AddPresentationScreen extends React.Component {
               </If>
           </View>
         </View>
-      </ScrollView>
+      </SafeAreaView>
     );
   }
 }
