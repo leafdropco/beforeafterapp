@@ -1,5 +1,6 @@
 import React from "react";
-import {View, Text, Platform } from "react-native";
+import {View, Text, Platform, Animated, Easing, Dimensions } from "react-native";
+var {width, height} = Dimensions.get('window');
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -11,25 +12,70 @@ import { TransitionImage, FullScreenPresentation } from "../components/AppCompon
 export default class ViewPresentationScreen extends React.Component{
     static navigationOptions = { header: null };
 
+
     constructor(props){
         super(props)
-        this.state = {
-            uid: this.props.navigation.state.params.data
-        }
+    }
+
+    state = {
+        uid: this.props.navigation.state.params.data,
+        expAnimation: new Animated.Value(height*0.1),
+        arrowAnimation: new Animated.Value(180),
+        expanded: false,
+        rotateValue: new Animated.Value(180)
     }
 
 
     componentDidMount() {
-        console.log(this.props.navigation.state.params.data)
-        //this.setState({uid: this.props.navigation.state.params.data})
     }
 
     changePage(screen) {
         this.props.navigation.navigate(screen)
-        console.log(screen)
     }
 
+    rotateAnimation = () => {
+        Animated.sequence([
+            Animated.timing(this.state.rotateValue, {
+                toValue: 180,
+                duration: 300,
+                easing: Easing.linear()
+            })
+        ])
+    }
+
+    expandFooter() {
+        if (this.state.expanded) {
+            Animated.timing(this.state.expAnimation, {toValue: height*0.1, duration: 300, easing: Easing.back()}).start(() => {
+                Animated.timing(this.state.rotateValue, {
+                    toValue: 0,
+                    duration: 300,
+                    easing: Easing.linear()
+                })
+                this.state.expanded = false
+                console.log(this.state.rotateValue)
+            })
+        }
+        else {
+            Animated.timing(this.state.expAnimation, {toValue: height*0.3, duration: 300, easing: Easing.back()}).start(() => {
+                Animated.timing(this.state.rotateValue, {
+                    toValue: 0,
+                    duration: 300,
+                    easing: Easing.linear()
+                })
+                this.state.expanded = true
+                console.log(this.state.rotateValue)
+            })
+        }
+
+    }
+
+
     render(){
+        const interpolateRotateAnimation = this.state.rotateValue.interpolate({
+            inputRange: [0, 180],
+            outputRange: ['0deg', '180deg']
+        })
+
      return(
          <View style={{ flexDirection: "row", flexWrap: 'wrap' }}>
              <FullScreenPresentation
@@ -37,27 +83,31 @@ export default class ViewPresentationScreen extends React.Component{
                  images={{ before: this.state.uid[1], after: this.state.uid[0] }}
                  duration={this.state.uid[3]}
              />
-
-             <View style={{height: '10%', width: '100%', backgroundColor: '#000', position: 'absolute', bottom: 0, zIndex:999, padding: 10}}>
+             {console.log(this.state.expAnimation.__getValue())}
+             <Animated.View style={{height: this.state.expAnimation, width: '100%', backgroundColor: '#000', position: 'absolute', bottom: 0, zIndex:999, padding: 10}}>
                  <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                     <Text style={{paddingLeft: 20}} onPress={() => {this.changePage('Home')}}>
+                     {console.log(interpolateRotateAnimation)}
+                         <Text style={{paddingLeft: 20}} onPress={() => {this.changePage('Home')}}>
+                            <Ionicons
+                                name={Platform.OS === "ios" ? `ios-arrow-back` : "md-arrow-back"}
+                                size={36}
+                                color="#0AC9D9"
+                            />
+                         </Text>
 
-                         <Ionicons
-                             name={Platform.OS === "ios" ? `ios-arrow-back` : "md-arrow-back"}
-                             size={36}
-                             color="#0AC9D9"
-                         />
-                     </Text>
                      <Text style={{color: '#0AC9D9', fontSize: 18}}>Title</Text>
-                     <Text style={{paddingRight: 20}}>
-                         <Ionicons
-                             name={Platform.OS === "ios" ? `ios-download` : "md-download"}
-                             size={36}
-                             color="#0AC9D9"
-                         />
-                     </Text>
+
+                     <Animated.View style={{transform: [{rotate: interpolateRotateAnimation}]}}>
+                         <Text style={{paddingRight: 20}} onPress={() => {this.expandFooter()}}>
+                             <Ionicons
+                                 name={Platform.OS === "ios" ? `ios-download` : "md-download"}
+                                 size={36}
+                                 color="#0AC9D9"
+                             />
+                         </Text>
+                     </Animated.View>
                  </View>
-             </View>
+             </Animated.View>
          </View>
      );
     }

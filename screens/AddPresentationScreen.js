@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Text,
   Dimensions,
-  Alert
+  Alert,
+    Platform,
 } from "react-native";
 import { ImagePicker } from "expo";
 import * as firebase from "firebase";
@@ -15,8 +16,10 @@ import "firebase/firestore";
 import { Button, DefaultTextInput } from "../components/AppComponents";
 import { Header } from "../components/AppComponents";
 import { uuid } from "../helpers/uuid";
+import { withNavigation } from 'react-navigation';
 import { LinearGradient } from "expo";
 import ButtonSecondary from "../components/AppComponents/ButtonSecondary";
+import { Ionicons } from "@expo/vector-icons";
 
 export default class AddPresentationScreen extends React.Component {
   static navigationOptions = {
@@ -28,6 +31,8 @@ export default class AddPresentationScreen extends React.Component {
     after: null,
     title: 'My Presentation'
   };
+
+
   componentDidMount() {
     this._getCurrentPresentations();
   }
@@ -132,8 +137,24 @@ export default class AddPresentationScreen extends React.Component {
 
   render() {
     let { before, after } = this.state;
-    return (
+
+      return (
       <SafeAreaView style={styles.scrollView}>
+          <View style={{height: '10%', width: '100%', position: 'absolute', bottom: 0, zIndex:999, padding: 10}}>
+              <View style={{flexDirection: 'row', width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <View style={{paddingLeft: 20, flexDirection: 'row', alignItems: 'center'}}>
+
+                      <Ionicons onPress={() => { this.props.navigation.goBack() }}
+                          name={Platform.OS === "ios" ? `ios-arrow-back` : "md-arrow-back"}
+                          size={36}
+                          color="#0AC9D9"
+                      />
+                      <Text onPress={() => { this.props.navigation.goBack() }} style={{color: '#0AC9D9', fontSize: 18, paddingLeft:15}}>Cancel</Text>
+                  </View>
+
+
+              </View>
+          </View>
         <LinearGradient
             colors={["#05809D", "#0AC9D9"]}
             style={styles.title}
@@ -147,13 +168,15 @@ export default class AddPresentationScreen extends React.Component {
         </LinearGradient>
 
         <View>
-          <DefaultTextInput
-            placeholder="Presentation Name"
-            value={this.state.title}
-            onChangeText={text => {
-              this.setState({ title: text });
-            }}
-          />
+            <View style={{width:'100%', flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 10, alignItems: 'center'}}>
+                <DefaultTextInput
+                    placeholder="Presentation Name"
+                    value={this.state.title}
+                    onChangeText={text => {
+                        this.setState({ title: text });
+                    }}
+                />
+            </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between", }}
           >
@@ -203,7 +226,6 @@ export default class AddPresentationScreen extends React.Component {
                 bottom: 0
             }}
           >
-              <Button title="Cancel" callback={() => this.props.navigation.navigate("Home")} />
               <If condition={this.state.before != null && this.state.after != null}>
                 <Button title="Save" callback={this._saveImage} />
               </If>
@@ -229,7 +251,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     paddingVertical: 20,
-    paddingHorizontal: 10
+    paddingRight: 20
   },
   title: {
       paddingLeft: 25,

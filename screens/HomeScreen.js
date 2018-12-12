@@ -71,8 +71,9 @@ export default class HomeScreen extends React.Component {
           style={{
             flex: 'grow',
             flexDirection: "column",
-            paddingVertical: 50,
-            paddingHorizontal: 10,
+            paddingTop: 20,
+              paddingBottom: 75,
+            paddingHorizontal: 13,
               height: "100%"
           }}
         >
