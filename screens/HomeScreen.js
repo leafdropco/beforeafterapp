@@ -82,10 +82,11 @@ export default class HomeScreen extends React.Component {
               this.state.data &&
               this.state.data.presentations &&
               this.state.data.presentations.map((image, index) => {
+                  {console.log(image);}
                 const Header = (
                   <View style={styles.container}>
                     <Text style={styles.text} onPress={()=>this.goToViewPresentation([image.after, image.before, image.title, image.duration])}>{image.title}</Text>
-                    <Text style={styles.para} onPress={()=>this.goToViewPresentation([image.after, image.before, image.title, image.duration])}>[Date]</Text>
+                    <Text style={styles.para} onPress={()=>this.goToViewPresentation([image.after, image.before, image.title, image.duration])}>12/17/2018</Text>
                   </View>
                 );
                 return (
