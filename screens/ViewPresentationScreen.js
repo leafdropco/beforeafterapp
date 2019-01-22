@@ -25,12 +25,19 @@ export default class ViewPresentationScreen extends React.Component{
         ticketCount: 1,
         ticketModalVisible: false,
         feedbackModalVisible: false,
-            WaterMark: true,
-            TitleValue: false,
-            BATitlesValue: false,
-            HqValue: false,
-            TransitionValue: "fade",
-        cart: 0
+        cart: 0,
+        switchValues: [
+            { name: 'Watermark', value: true, lockedForNonVip: true },
+            {
+                name: 'Show "Before & After" Titles',
+                value: true,
+                lockedForNonVip: false,
+            },
+            { name: 'Show Presentation Title', value: false, lockedForNonVip: true },
+            { name: 'Export in 4k', value: false, lockedForNonVip: true },
+        ],
+        isVip: false,
+        purchased: false
     };
 
     changePage(screen) {
@@ -105,6 +112,20 @@ export default class ViewPresentationScreen extends React.Component{
         this.setState({ticketModalVisible: visible});
     }
 
+    updateSwitches(value, index, lockedForNonVip) {
+        //check to see if user is VIP:
+        const { isVip, switchValues } = this.state;
+
+        if (lockedForNonVip && isVip) {
+            let stateCopy = (Object.assign({}, switchValues)[index].value = !value);
+            this.setState({ stateCopy });
+        }
+        if (!lockedForNonVip) {
+            let stateCopy = (Object.assign({}, switchValues)[index].value = !value);
+            this.setState({ stateCopy });
+        }
+    }
+
 
     render(){
         // Component gets rendered when footer is NOT expanded
@@ -138,6 +159,12 @@ export default class ViewPresentationScreen extends React.Component{
                     </Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity onPress={() => {this.expandFooter()}} style={{marginTop: 20}}>
+                    <Text style={{padding: 6, color: "#0AC9D9", fontSize: 16, fontWeight: "bold"}}>
+                        Credits: {this.state.cart > 0 ? this.state.cart : "Get More"}
+                    </Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => {this.validateSave()}} style={{flexDirection: "row", alignItems: "center", marginRight: 20, marginTop: 20, backgroundColor: "#0AC9D9", paddingHorizontal: 10, paddingVertical: 8,}}>
                     <Text style={{color: "#fff", fontSize: 16}}>
                         Save
@@ -149,6 +176,13 @@ export default class ViewPresentationScreen extends React.Component{
                         style={{marginLeft: 10}}/>
                 </TouchableOpacity>
             </View>
+        );
+
+        // Displays Vip icon
+        const VipIcon = () => (
+            <TouchableOpacity style={{padding: 4, borderColor: "#0AC9D9", borderWidth: 1, marginLeft: 10}}>
+                <Text style={{color: "#0AC9D9", fontSize: 10, fontWeight: "bold"}}>Locked</Text>
+            </TouchableOpacity>
         );
 
          return(
@@ -170,7 +204,21 @@ export default class ViewPresentationScreen extends React.Component{
                                  style={{marginLeft: 10}}/>
                          </TouchableOpacity>
                          <View>
-                             <Text>Hello World!</Text>
+                             { // iterates through switch values
+                                 this.state.switchValues.map((item, index, key) => (
+                                     <View style={{borderBottomColor: "#d0f4f7", borderBottomWidth: 2, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, paddingBottom: 15, marginTop:45, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
+                                         <View style={{flexDirection: 'row'}}>
+                                             <Text style={{color: '#0AC9D9', fontSize: 18}}>
+                                                 {item.name}
+                                             </Text>
+                                             {item.lockedForNonVip && <VipIcon/>}
+                                         </View>
+                                         <Switch
+                                             onValueChange={() => {this.updateSwitches(item.value, index, item.lockedForNonVip), console.log()}}
+                                             value={item.value} disabled={item.lockedForNonVip && !this.state.isVip} />
+                                     </View>
+                                 ))
+                             }
 
                              <Text onPress={() => {
                                  this.showTicketModal(!this.state.ticketModalVisible);
@@ -197,56 +245,9 @@ export default class ViewPresentationScreen extends React.Component{
                  />
                  <Animated.View style={{height: this.state.expAnimation, width: '100%', backgroundColor: '#fff', position: 'absolute', bottom: 0, zIndex:999, padding: 10}}>
 
-                     {this.state.expanded ? <SaveComponent /> : <ExpComponent />}
-
-                     { // SIMPLIFY WITH ITERATIVE LOOP AND ARRAY FOR TITLES
+                     { // Shows/hides save controls
+                         this.state.expanded ? <SaveComponent /> : <ExpComponent />
                      }
-                     <View style={{borderBottomColor: "#d0f4f7", borderBottomWidth: 2, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, paddingBottom: 15, marginTop:45, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                         <Text style={{color: '#0AC9D9', fontSize: 18}}>Watermark</Text>
-                         <Switch
-                             onValueChange={(value) => {this.updateCart(value), this.setState({WaterMark: value})}}
-                             value={this.state.WaterMark} />
-                     </View>
-                     <View style={{borderBottomColor: "#d0f4f7", borderBottomWidth: 2, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, paddingBottom: 15, marginTop:10, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                         <Text style={{color: '#0AC9D9', fontSize: 18}}>Show Presentation Title</Text>
-                         <Switch
-                             onValueChange={(value) => {this.updateCart(value), this.setState({TitleValue: value})}}
-                             value={this.state.TitleValue} />
-                     </View>
-                     <View style={{borderBottomColor: "#d0f4f7", borderBottomWidth: 2, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, paddingBottom: 15, marginTop:10, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                         <Text style={{color: '#0AC9D9', fontSize: 18}}>Show "Before & After" Titles</Text>
-                         <Switch
-                             onValueChange={(value) => {this.updateCart(value), this.setState({BATitlesValue: value})}}
-                             value={this.state.BATitlesValue} />
-                     </View>
-                     <View style={{borderBottomColor: "#d0f4f7", borderBottomWidth: 2, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, paddingBottom: 15, marginTop:10, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                         <Text style={{color: '#0AC9D9', fontSize: 18}}>Export in 4K</Text>
-                         <Switch
-                             onValueChange={(value) => {this.updateCart(value), this.setState({HqValue: value})}}
-                             value={this.state.HqValue} />
-                     </View>
-                     <View style={{flexDirection: 'row', paddingLeft: 20, paddingRight: 20, paddingBottom: 15, marginTop:20, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                         <Text style={{color: '#0AC9D9', fontSize: 18}}>Select Transition</Text>
-                     </View>
-                     <View style={{borderBottomColor: "#0AC9D9", borderBottomWidth: 1, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, paddingBottom: 15, marginTop:10, width: '100%', justifyContent: 'space-between', alignItems: 'center'}}>
-                         <Picker
-                             selectedValue={this.state.TransitionValue}
-                             style={{ height: 65, width: "100%", color: '#fff', marginTop: 0 }}
-                             itemStyle = {{color:"#0AC9D9", height: 55}}
-                             onValueChange={(itemValue, itemIndex) => {
-                                 if(itemValue !== "Fade" && this.state.cart > 0 || itemValue !== "Fade" && this.state.cart < 5 ) this.updateCart(false), this.setState({TransitionValue: itemValue})
-                                 else this.updateCart(true), this.setState({TransitionValue: itemValue})
-                                 console.log("else trans: " + itemValue)
-
-                             }}>
-                             <Picker.Item label="Fade" value="fade" />
-                             <Picker.Item label="Slide Down" value="down" />
-                             <Picker.Item label="Slide Up" value="up" />
-                             <Picker.Item label="Slide Left" value="left" />
-                             <Picker.Item label="Slide Right" value="right" />
-                             <Picker.Item label="Drop" value="drop" />
-                         </Picker>
-                     </View>
 
                  </Animated.View>
              </View>
